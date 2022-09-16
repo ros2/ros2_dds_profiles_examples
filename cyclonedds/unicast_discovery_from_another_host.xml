@@ -1,0 +1,30 @@
+<CycloneDDS xmlns="https://cdds.io/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://cdds.io/config https://raw.githubusercontent.com/eclipse-cyclonedds/cyclonedds/master/etc/cyclonedds.xsd">
+    <Domain Id="any">
+        <General>
+            <Interfaces>
+                <!--
+                    If we set more than one interface, the initial peers list does not
+                    work as expected.
+                    So only use one ...
+                -->
+                <NetworkInterface address="172.17.0.3" multicast="false" />
+                <!--
+                    This breaks the sending of unicast spdp packets to the specified peer
+                    for some weird reason
+                -->
+                <!-- <NetworkInterface address="127.0.0.1" multicast="false" /> -->
+            </Interfaces>
+            <AllowMulticast>false</AllowMulticast>
+            <!-- <RedundantNetworking>true</RedundantNetworking> -->
+            <!-- <MulticastRecvNetworkInterfaceAddresses>any</MulticastRecvNetworkInterfaceAddresses> -->
+        </General>
+        <Discovery>
+            <Peers>
+                <!-- IP address of the node we want to connect to.-->
+                <Peer address="172.17.0.2"/>
+                <!--optionally, to comunicate with other local nodes.-->
+                <Peer address="172.17.0.3"/>
+            </Peers>
+        </Discovery>
+    </Domain>
+</CycloneDDS>
