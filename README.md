@@ -41,6 +41,10 @@ export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 export CYCLONEDDS_URI=file:///path/to/profile/file.xml
 ```
 
+### Compatibility
+
+You can mix nodes using CycloneDDS/FastDDS, they all work as expected as far as tested.
+
 ## Testing the settings with docker
 
 If you want to test host-to-host communication using docker make sure to:
