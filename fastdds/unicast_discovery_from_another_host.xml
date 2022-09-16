@@ -5,14 +5,19 @@
             <transport_id>udp_transport</transport_id>
             <type>UDPv4</type>
             <interfaceWhiteList>
+                <!--
+                    NOTE
+                    Use the localhost interface.
+                -->
                 <address>127.0.0.1</address>
                 <!--
-                    IP address of the network interface where we can
-                    connect to the other node.
+                    REQUIRES UPDATE
+                    IP address of the network interface to be used.
                 -->
                 <address>172.17.0.3</address>
             </interfaceWhiteList>
             <!--
+                REQUIRES UPDATE
                 Max number of independent participants (rclcpp::Context, default 1 per process)
                 we expect running in a single host
             -->

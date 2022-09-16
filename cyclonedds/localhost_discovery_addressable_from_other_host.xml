@@ -3,11 +3,16 @@
         <General>
             <Interfaces>
                 <!--
+                    NOTE
                     Unfortunately, using `multicast="true"` in some interfaces and
                     `multicast="false"` in others doesn't work as I would expect.
                     So "false" must be set in all.
                 -->
                 <NetworkInterface address="127.0.0.1" multicast="false" />
+                <!--
+                    REQUIRES UPDATE
+                    IP address of the network interface from where other hosts should be able to connect.
+                -->
                 <NetworkInterface address="172.17.0.2" multicast="false" />
             </Interfaces>
         </General>

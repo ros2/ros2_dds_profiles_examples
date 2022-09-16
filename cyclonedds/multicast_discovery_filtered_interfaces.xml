@@ -8,6 +8,11 @@
                     multicast can be any of true/false/default.
                 -->
                 <NetworkInterface address="127.0.0.1" multicast="true" />
+                <!--
+                    REQUIRES UPDATE
+                    IP address of the network interface we want to use.
+                -->
+                <NetworkInterface address="172.17.0.2" multicast="true" />
             </Interfaces>
         </General>
     </Domain>

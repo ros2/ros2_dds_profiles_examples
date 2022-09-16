@@ -5,6 +5,10 @@
             <transport_id>udp_transport</transport_id>
             <type>UDPv4</type>
             <interfaceWhiteList>
+                <!--
+                    NOTE
+                    Select the localhost interface.
+                -->
                 <address>127.0.0.1</address>
             </interfaceWhiteList>
         </transport_descriptor>

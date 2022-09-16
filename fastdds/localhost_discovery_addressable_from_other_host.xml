@@ -5,16 +5,21 @@
             <transport_id>udp_transport</transport_id>
             <type>UDPv4</type>
             <interfaceWhiteList>
+                <!--
+                    NOTE
+                    Use the localhost interface.
+                -->
                 <address>127.0.0.1</address>
                 <!--
-                    IP address of the network interface where we expect other
-                    nodes to connect from.
+                    REQUIRES UPDATE
+                    IP address of the network interface from where other hosts should be able to connect.
                 -->
                 <address>172.17.0.2</address>
             </interfaceWhiteList>
             <!--
+                REQUIRES UPDATE
                 Max number of independent participants (rclcpp::Context, default 1 per process)
-                we expect running in a single host
+                we expect running in a single host.
             -->
             <maxInitialPeersRange>100</maxInitialPeersRange>
         </transport_descriptor>
@@ -27,6 +32,7 @@
                     <locator>
                         <udpv4>
                             <!--
+                                NOTE
                                 Though fastdds supports filtering interfaces, you cannot only apply
                                 that filter to multicast discovery, which is what we want here.
                                 So we want this participant to use unicast discovery with any node
@@ -39,7 +45,10 @@
                     </locator>
                 </initialPeersList>
                 <metatrafficUnicastLocatorList>
-                    <!--This will disable multicast spdp, while still enabling unicast.-->
+                    <!--
+                        NOTE
+                        This will disable multicast spdp, while still enabling unicast.
+                    -->
                     <locator/>
                 </metatrafficUnicastLocatorList>
             </builtin>

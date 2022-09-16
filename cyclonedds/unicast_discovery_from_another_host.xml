@@ -3,26 +3,37 @@
         <General>
             <Interfaces>
                 <!--
+                    NOTE
                     If we set more than one interface, the initial peers list does not
                     work as expected.
                     So only use one ...
                 -->
+                <!--
+                    REQUIRES UPDATE
+                    IP address of the network interface to be used.
+                -->
                 <NetworkInterface address="172.17.0.3" multicast="false" />
                 <!--
+                    NOTE
                     This breaks the sending of unicast spdp packets to the specified peer
                     for some weird reason
                 -->
                 <!-- <NetworkInterface address="127.0.0.1" multicast="false" /> -->
             </Interfaces>
             <AllowMulticast>false</AllowMulticast>
-            <!-- <RedundantNetworking>true</RedundantNetworking> -->
-            <!-- <MulticastRecvNetworkInterfaceAddresses>any</MulticastRecvNetworkInterfaceAddresses> -->
         </General>
         <Discovery>
             <Peers>
-                <!-- IP address of the node we want to connect to.-->
+                <!--
+                    REQUIRES UPDATE
+                    IP address of the node we want to connect to.
+                -->
                 <Peer address="172.17.0.2"/>
-                <!--optionally, to comunicate with other local nodes.-->
+                <!--
+                    REQUIRES UPDATE
+                    optionally, to comunicate with other local nodes.
+                    IP address of the network interface used.
+                -->
                 <Peer address="172.17.0.3"/>
             </Peers>
         </Discovery>
