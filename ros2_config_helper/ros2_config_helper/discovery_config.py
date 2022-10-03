@@ -30,7 +30,7 @@ def get_validated_input(msg, validation, try_again_msg):
     return input_data
 
 
-def create_discovery_config_from_questions():
+def create_discovery_config_from_questions(remote_computer):
     print(
         'Select what describes best your use case:\n'
         '  - (A) Communication is limited to localhost, e.g. development.\n'
@@ -55,9 +55,10 @@ def create_discovery_config_from_questions():
         'a comma separated list of IP addresses or interfaces names')
     network_interfaces_or_addresses = get_validated_input(
         'interfaces: ',
-        net_helper.check_valid_network_interfaces_or_addresses,
+        lambda x: net_helper.check_valid_network_interfaces_or_addresses(x, remote_computer),
         'all the interfaces need to be valid: ')
-    network_interfaces_addresses = net_helper.to_addresses(network_interfaces_or_addresses)
+    network_interfaces_addresses = net_helper.to_addresses(
+        network_interfaces_or_addresses, remote_computer)
     if '127.0.0.1' not in network_interfaces_addresses:
         # TODO: Check if there's a valid loopback interface
         network_interfaces_addresses.append('127.0.0.1')
@@ -68,8 +69,8 @@ def create_discovery_config_from_questions():
             net_helper.check_is_valid_ip_addresses,
             'Addresses must be valid IPv4, try again: ')
         peers = net_helper.comma_separated_to_list(peers)
-    discovery_type = DiscoveryType.Unicast if choice not in ['A', 'D'] else DiscoveryType.Multicast
-    print(discovery_type)
+    discovery_type = (
+        DiscoveryType.Unicast if choice not in ['A', 'D'] else DiscoveryType.Multicast)
     network_interfaces_to_discovery_type = {
         address: discovery_type for address in network_interfaces_addresses
     }

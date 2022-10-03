@@ -1,6 +1,7 @@
 from pathlib import Path
 import sys
 import time
+import traceback as tb
 
 import argparse
 from lxml import etree as ET
@@ -23,8 +24,26 @@ def parse_args(argv=sys.argv[1:]):
         '--backends', '-b', nargs='*', choices=('all', *BACKENDS.keys()), default=['all'],
         help='DDS vendor specific backend to use, if "all" is selected every backend will be run')
     parser.add_argument(
-        '--output-dir', '-o', type=Path, default=Path(f'ros2_config_helper_{time.time_ns()}'))
+        '--output-dir', '-o', type=Path, default=Path(f'ros2_config_helper_{time.time_ns()}'),
+        help='directory where to store resulting profiles')
+    parser.add_argument(
+        '--debug', '-d', action='store_true', help='print complete tracebacks of catched errors')
+    parser.add_argument(
+        '--remote-computer', '-r', action='store_true',
+        help='The profile file is generated for another computer. '
+        'This avoids checking the validity of network interfaces and similar checks.'
+    )
+    # TODO: Handle the next two options
+    parser.add_argument(
+    '--force', '-f', action='store_true', help='use existing folders or override existing files if needed')
+    parser.add_argument(
+        '--recursive', action='store_true', help='create directories recursively if needed')
     return parser.parse_args(argv)
+
+
+def print_tb(debug):
+    if debug:
+        tb.print_exc(file=sys.stderr)
 
 
 def print_mkdir_error(exc, output_dir):
@@ -36,6 +55,7 @@ def print_mkdir_error(exc, output_dir):
     else:
         end = str(exc)
     print(f'{base_msg}{end}', file=sys.stderr)
+    print_tb()
 
 
 def main(args):
@@ -45,14 +65,11 @@ def main(args):
     except Exception as exc:
         print_mkdir_error(exc, output_dir)
         return 1
-    discovery_config = create_discovery_config_from_questions()
+    discovery_config = create_discovery_config_from_questions(args.remote_computer)
     backends = args.backends
-    print(args.backends)
     if 'all' in args.backends:
         backends = BACKENDS.keys()
-    print(backends)
     for backend_name in backends:
-        print(backend_name)
         backend_output_dir = output_dir / backend_name
         try:
             backend_output_dir.mkdir(mode=0o775)
@@ -66,6 +83,7 @@ def main(args):
             print(
                 f"Unexpected error when opening file: {exc}",
                 file=sys.stderr)
+            print_tb()
             return 1
         backend = BACKENDS[backend_name]
         try:
@@ -77,6 +95,7 @@ def main(args):
                 'Unexpected error when generating XML profiles for backend '
                 f"{backend_name}': {exc}",
                 file=sys.stderr)
+            print_tb()
             return 1
     return 0
 
