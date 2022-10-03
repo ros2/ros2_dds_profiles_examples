@@ -41,7 +41,7 @@ def print_mkdir_error(exc, output_dir):
 def main(args):
     output_dir = args.output_dir.resolve()
     try:
-        output_dir.mkdir(mode=0o664)
+        output_dir.mkdir(mode=0o775)
     except Exception as exc:
         print_mkdir_error(exc, output_dir)
         return 1
@@ -52,46 +52,33 @@ def main(args):
     for backend_name in backends:
         backend_output_dir = output_dir / backend_name
         try:
-            backend_output_dir.mkdir(mode=0o664)
+            backend_output_dir.mkdir(mode=0o775)
         except Exception as exc:
             print_mkdir_error(exc, backend_output_dir)
             return 1
         output_file = backend_output_dir / 'profiles.xml'
         try:
-            output_file.open('x', mode=0o664)
+            output_file.open('x')
         except Exception as exc:
             print(
                 f"Unexpected error when opening file: {exc}",
                 file=sys.stderr)
+            import traceback as tb
+            tb.print_exception(exc)
+            return 1
         backend = BACKENDS[backend_name]
         try:
-            xml = backend(discovery_config)
-            xml.write(output_file, encoding='unicode')
+            xml_element = backend(discovery_config)
+            et = ET.ElementTree(xml_element)
+            et.write(output_file, encoding='unicode')
         except Exception as exc:
             print(
                 'Unexpected error when generating XML profiles for backend '
                 f"{backend_name}': {exc}",
                 file=sys.stderr)
+            return 1
         return 0
 
 
 if __name__ == '__main__':
     sys.exit(main(parse_args()))
-    # config_localhost_isolated = DiscoveryConfig(
-    #     network_interface_to_discovery_type={'127.0.0.1': DiscoveryType.Multicast})
-    # print(ET.tostring(
-    #     profiles_from_discovery_config(config_localhost_isolated),
-    #     encoding='unicode',
-    #     pretty_print=True))
-    # config_unicast_disc_no_initial_peers = DiscoveryConfig(
-    #     network_interface_to_discovery_type={
-    #         '127.0.0.1': DiscoveryType.Unicast,
-    #         '172.17.0.2': DiscoveryType.Unicast,
-    #     },
-    #     peer_range=100)
-    # xml = profiles_from_discovery_config(config_unicast_disc_no_initial_peers)
-    # ET.indent(xml)
-    # print(ET.tostring(
-    #     xml,
-    #     encoding='unicode',
-    #     pretty_print=True))
