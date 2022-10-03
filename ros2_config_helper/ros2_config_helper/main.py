@@ -47,9 +47,12 @@ def main(args):
         return 1
     discovery_config = create_discovery_config_from_questions()
     backends = args.backends
+    print(args.backends)
     if 'all' in args.backends:
         backends = BACKENDS.keys()
+    print(backends)
     for backend_name in backends:
+        print(backend_name)
         backend_output_dir = output_dir / backend_name
         try:
             backend_output_dir.mkdir(mode=0o775)
@@ -63,8 +66,6 @@ def main(args):
             print(
                 f"Unexpected error when opening file: {exc}",
                 file=sys.stderr)
-            import traceback as tb
-            tb.print_exception(exc)
             return 1
         backend = BACKENDS[backend_name]
         try:
@@ -77,7 +78,7 @@ def main(args):
                 f"{backend_name}': {exc}",
                 file=sys.stderr)
             return 1
-        return 0
+    return 0
 
 
 if __name__ == '__main__':

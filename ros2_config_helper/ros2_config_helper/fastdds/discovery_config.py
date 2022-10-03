@@ -39,6 +39,7 @@ FASTDDS_BASE_XML_PROFILES = """\
 
     <participant profile_name="default_part_profile" is_default_profile="true">
         <rtps>
+            <builtin/>
             <useBuiltinTransports>false</useBuiltinTransports>
             <userTransports>
                 <transport_id>udp_transport</transport_id>

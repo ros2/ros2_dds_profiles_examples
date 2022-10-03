@@ -18,7 +18,7 @@ class DiscoveryConfig:
     # interfaces, combining unicast/multicast discovery in different interfaces doesn't seem
     # to work well.
     # Anyway, we make this more flexible to future-proof it.
-    network_interface_to_discovery_type: Dict[str, DiscoveryType]
+    network_interfaces_to_discovery_type: Dict[str, DiscoveryType]
     initial_peers: Optional[List[str]] = None
     peer_range: Optional[int] = None
 
@@ -49,7 +49,7 @@ def create_discovery_config_from_questions():
     print(f'choice: {choice}')
     if choice == 'A':
         return DiscoveryConfig(
-            network_interface_to_discovery_type={'localhost': DiscoveryType.Multicast})
+            network_interfaces_to_discovery_type={'127.0.0.1': DiscoveryType.Multicast})
     print(
         'Select the network interfaces you want ROS 2 to use, you can use\n'
         'a comma separated list of IP addresses or interfaces names')
@@ -58,14 +58,18 @@ def create_discovery_config_from_questions():
         net_helper.check_valid_network_interfaces_or_addresses,
         'all the interfaces need to be valid: ')
     network_interfaces_addresses = net_helper.to_addresses(network_interfaces_or_addresses)
+    if '127.0.0.1' not in network_interfaces_addresses:
+        # TODO: Check if there's a valid loopback interface
+        network_interfaces_addresses.append('127.0.0.1')
     peers = []
     if choice == 'C':
         peers = get_validated_input(
             'Introduce the initial peer(s) IP address(es), comma separated: ',
-            net_helper.check_is_valid_ip_addresses(),
+            net_helper.check_is_valid_ip_addresses,
             'Addresses must be valid IPv4, try again: ')
         peers = net_helper.comma_separated_to_list(peers)
-    discovery_type = DiscoveryType.Unicast if choice not in ['A', 'D'] else DiscoveryType.Unicast
+    discovery_type = DiscoveryType.Unicast if choice not in ['A', 'D'] else DiscoveryType.Multicast
+    print(discovery_type)
     network_interfaces_to_discovery_type = {
         address: discovery_type for address in network_interfaces_addresses
     }
