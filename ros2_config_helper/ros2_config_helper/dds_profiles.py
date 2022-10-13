@@ -79,7 +79,7 @@ class DDSProfilesFromDiscoveryConfig:
         BASH_SETUP = f"""
 THIS_DIR=$(builtin cd "`dirname "${{BASH_SOURCE[0]}}"`" > /dev/null && pwd)
 {cls._EXPORT_XML_PROFILE_FILE}
-export RMW_IMPLMENTATION={cls._RMW_IMPLEMENTATION_NAME}
+export RMW_IMPLEMENTATION={cls._RMW_IMPLEMENTATION_NAME}
 """
         setup_bash_path = directory / 'setup_env.bash'
         with setup_bash_path.open(open_mode) as f:

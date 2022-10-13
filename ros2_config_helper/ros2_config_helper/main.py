@@ -88,7 +88,7 @@ def run(args):
             xml_element = backend.profiles_from_discovery_config(discovery_config)
             et = ET.ElementTree(xml_element)
             with output_file_cm as f:
-                et.write(f, encoding='unicode')
+                et.write(f, encoding='utf8')
         except Exception as exc:
             print(
                 'Unexpected error when generating XML profiles for backend '
