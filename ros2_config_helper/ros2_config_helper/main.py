@@ -55,7 +55,7 @@ def print_mkdir_error(exc, output_dir, debug):
     print_tb(debug)
 
 
-def main(args):
+def run(args):
     output_dir: Path = args.output_dir.resolve()
     try:
         output_dir.mkdir(mode=0o775, parents=args.recursive, exist_ok=args.force)
@@ -113,5 +113,9 @@ def main(args):
     return 0
 
 
+def main():
+    return run(parse_args())
+
+
 if __name__ == '__main__':
-    sys.exit(main(parse_args()))
+    sys.exit(main())

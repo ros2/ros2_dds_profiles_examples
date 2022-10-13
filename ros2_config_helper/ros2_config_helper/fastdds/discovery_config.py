@@ -1,8 +1,4 @@
-from lxml import etree as ET
-
 from ..dds_profiles import DDSProfilesFromDiscoveryConfig
-from ..discovery_config import DiscoveryConfig
-from ..discovery_config import DiscoveryType
 
 FASTDDS_PROFILES_SCHEMA_URL = 'http://www.eprosima.com/XMLSchemas/fastRTPS_Profiles'
 FASTDDS_XML_NAMESPACES = {'': FASTDDS_PROFILES_SCHEMA_URL}

@@ -1,7 +1,6 @@
 from lxml import etree as ET
 
 from ..dds_profiles import DDSProfilesFromDiscoveryConfig
-from ..discovery_config import DiscoveryConfig
 from ..discovery_config import DiscoveryType
 
 CYCLONEDDS_PROFILES_SCHEMA_URL = 'https://cdds.io/config'
