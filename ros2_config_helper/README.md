@@ -12,7 +12,6 @@ ros2 run ros2_config_helper -o <OUTPUT_DIR>
 If you do not want to build a ROS 2 workspace, you can do:
 
 ```
-cd ros2_config_helper
 python3 -m ros2_config_helper.main -o <OUTPUT_DIR>
 ```
 
