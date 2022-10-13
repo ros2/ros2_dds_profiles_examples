@@ -62,8 +62,5 @@ class FastDDSProfilesFromDiscoveryConfig(DDSProfilesFromDiscoveryConfig):
     _DISABLE_MULTICAST_XML_ITEM = FASTDDS_DISABLE_MULTICAST_XML_ITEM
     _PEER_RANGE_PARENT_XPATH = FASTDDS_PEER_RANGE_PARENT_XPATH
     _PEER_RANGE_XML_ITEM = FASTDDS_PEER_RANGE_XML_ITEM
-
-
-def fastrtps_profiles_from_discovery_config(discovery_config: DiscoveryConfig):
-    return FastDDSProfilesFromDiscoveryConfig.profiles_from_discovery_config(
-        discovery_config)
+    _RMW_IMPLEMENTATION_NAME = 'rmw_fastrtps_cpp'
+    _EXPORT_XML_PROFILE_FILE = 'export FASTRTPS_DEFAULT_PROFILES_FILE=$THIS_DIR/profiles.xml'

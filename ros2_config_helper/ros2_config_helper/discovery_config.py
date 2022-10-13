@@ -35,7 +35,7 @@ def create_discovery_config_from_questions(remote_computer):
         'Select what describes best your use case:\n'
         '  - (A) Communication is limited to localhost, e.g. development.\n'
         '  - (B) Want to only discover local nodes by default, but be able to\n'
-        '    connect from another computer if specifying the ip.\n'
+        '    connect from get_pid(another computer if specifying the ip.\n'
         '    This will use unicast discovery.\n'
         '  - (C) Want to be able to talk to one or many other computers of\n'
         '    known IP(s). Discovery can be asymmetric, i.e. as long as all\n'

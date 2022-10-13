@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Dict
 
 from lxml import etree as ET
@@ -18,6 +19,8 @@ class DDSProfilesFromDiscoveryConfig:
     _DISABLE_MULTICAST_XML_ITEM: str
     _PEER_RANGE_PARENT_XPATH: str
     _PEER_RANGE_XML_ITEM: str
+    _RMW_IMPLEMENTATION_NAME: str
+    _EXPORT_XML_PROFILE_FILE: str
   
     @classmethod
     def _check_valid_config(cls, discovery_config: DiscoveryConfig):
@@ -66,3 +69,18 @@ class DDSProfilesFromDiscoveryConfig:
             profiles_file, discovery_config.network_interfaces_to_discovery_type)
         ET.indent(profiles_file)
         return profiles_file
+
+    @classmethod
+    def generate_setup_env_files(
+        cls,
+        directory: Path,
+        open_mode: str = 'x',
+    ):
+        BASH_SETUP = f"""
+THIS_DIR=$(builtin cd "`dirname "${{BASH_SOURCE[0]}}"`" > /dev/null && pwd)
+{cls._EXPORT_XML_PROFILE_FILE}
+export RMW_IMPLMENTATION={cls._RMW_IMPLEMENTATION_NAME}
+"""
+        setup_bash_path = directory / 'setup_env.bash'
+        with setup_bash_path.open(open_mode) as f:
+            f.write(BASH_SETUP)

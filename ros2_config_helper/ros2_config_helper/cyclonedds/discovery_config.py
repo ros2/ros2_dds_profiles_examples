@@ -41,13 +41,10 @@ class CycloneDDSProfilesFromDiscoveryConfig(DDSProfilesFromDiscoveryConfig):
     _DISABLE_MULTICAST_XML_ITEM = CYCLONEDDS_DISABLE_MULTICAST_XML_ITEM
     _PEER_RANGE_PARENT_XPATH = CYCLONEDDS_PEER_RANGE_PARENT_XPATH
     _PEER_RANGE_XML_ITEM = CYCLONEDDS_PEER_RANGE_XML_ITEM
+    _RMW_IMPLEMENTATION_NAME = 'rmw_cyclonedds_cpp'
+    _EXPORT_XML_PROFILE_FILE = 'export CYCLONEDDS_URI=file://$THIS_DIR/profiles.xml'
 
     @classmethod
     def _add_interface_item(cls, parent, address, discovery_type):
         multicast_flag = str(discovery_type is not DiscoveryType.Unicast).lower()
         parent.append(ET.fromstring(cls._INTERFACE_XML_ITEM.format(address, multicast_flag)))
-
-
-def cyclonedds_profiles_from_discovery_config(discovery_config: DiscoveryConfig):
-    return CycloneDDSProfilesFromDiscoveryConfig.profiles_from_discovery_config(
-        discovery_config)

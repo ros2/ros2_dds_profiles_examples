@@ -6,15 +6,13 @@ import traceback as tb
 import argparse
 from lxml import etree as ET
 
-from .cyclonedds.discovery_config import cyclonedds_profiles_from_discovery_config
+from .cyclonedds.discovery_config import CycloneDDSProfilesFromDiscoveryConfig
 from .discovery_config import create_discovery_config_from_questions
-from .discovery_config import DiscoveryConfig
-from .discovery_config import DiscoveryType
-from .fastdds.discovery_config import fastrtps_profiles_from_discovery_config
+from .fastdds.discovery_config import FastDDSProfilesFromDiscoveryConfig
 
 BACKENDS = {
-    'fastdds': fastrtps_profiles_from_discovery_config,
-    'cyclonedds': cyclonedds_profiles_from_discovery_config,
+    'fastdds': FastDDSProfilesFromDiscoveryConfig,
+    'cyclonedds': CycloneDDSProfilesFromDiscoveryConfig,
 }
 
 
@@ -75,9 +73,10 @@ def main(args):
         except Exception as exc:
             print_mkdir_error(exc, backend_output_dir, args.debug)
             return 1
-        output_file = backend_output_dir / 'profiles.xml'
+        output_file_path = backend_output_dir / 'profiles.xml'
+        open_mode = 'w' if args.force else 'x'
         try:
-            output_file.open('w' if args.force else 'x')
+            output_file_cm = output_file_path.open(open_mode + 'b')
         except Exception as exc:
             print(
                 f"Unexpected error when opening file: {exc}",
@@ -86,13 +85,28 @@ def main(args):
             return 1
         backend = BACKENDS[backend_name]
         try:
-            xml_element = backend(discovery_config)
+            xml_element = backend.profiles_from_discovery_config(discovery_config)
             et = ET.ElementTree(xml_element)
-            et.write(output_file, encoding='unicode')
+            with output_file_cm as f:
+                et.write(f, encoding='unicode')
         except Exception as exc:
             print(
                 'Unexpected error when generating XML profiles for backend '
-                f"{backend_name}': {exc}",
+                f"{backend_name}: {exc}",
+                file=sys.stderr)
+            print_tb(args.debug)
+            return 1
+        try:
+            backend.generate_setup_env_files(backend_output_dir, open_mode)
+        except (FileExistsError, FileNotFoundError):
+            print(
+                f"Unexpected error when opening file: {exc}",
+                file=sys.stderr)
+            print_tb(args.debug)
+            return 1
+        except Exception as exc:
+            print(
+                f"Unexpected error when generating setup env files: {exc}",
                 file=sys.stderr)
             print_tb(args.debug)
             return 1
